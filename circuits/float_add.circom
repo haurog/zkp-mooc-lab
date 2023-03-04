@@ -146,7 +146,18 @@ template CheckBitLength(b) {
     signal input in;
     signal output out;
 
-    // TODO
+    signal bits[b];
+
+    for (var i = 0; i < b; i++) {
+        bits[i] <-- (in >> i) & 1;
+        bits[i] * (1 - bits[i]) === 0;
+    }
+    var sum_of_bits = 0;
+    for (var i = 0; i < b; i++) {
+        sum_of_bits += (2 ** i) * bits[i];
+    }
+
+    out <-- in > sum_of_bits? 0 : 1;
 }
 
 /*
