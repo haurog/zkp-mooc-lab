@@ -265,7 +265,18 @@ template LeftShift(shift_bound) {
     signal input skip_checks;
     signal output y;
 
-    // TODO
+    signal shifted_signal;
+    signal max_shifted_signal;
+
+    shifted_signal <-- x << shift;
+    max_shifted_signal <-- x << shift_bound;
+
+    if (!skip_checks) {
+        assert(0 <= shifted_signal);
+        assert(shifted_signal < max_shifted_signal);
+    }
+
+    y <-- shifted_signal;
 }
 
 /*
