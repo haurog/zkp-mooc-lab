@@ -204,7 +204,7 @@ template RightShift(shift) {
     signal input x;
     signal output y;
 
-    // TODO
+    y <-- x >> shift;
 }
 
 
