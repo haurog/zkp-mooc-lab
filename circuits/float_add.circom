@@ -147,17 +147,16 @@ template CheckBitLength(b) {
     signal output out;
 
     signal bits[b];
+    var sum_of_bits = 0;
 
     for (var i = 0; i < b; i++) {
         bits[i] <-- (in >> i) & 1;
         bits[i] * (1 - bits[i]) === 0;
-    }
-    var sum_of_bits = 0;
-    for (var i = 0; i < b; i++) {
         sum_of_bits += (2 ** i) * bits[i];
     }
 
-    out <-- in > sum_of_bits? 0 : 1;
+    out <-- sum_of_bits < in ? 0 : 1;
+    out*(1-out) === 0;
 }
 
 /*
@@ -207,6 +206,7 @@ template RightShift(shift) {
 
     // TODO
 }
+
 
 /*
  * Rounds the input floating-point number and checks to ensure that rounding does not make the mantissa unnormalized.
