@@ -291,6 +291,34 @@ template MSNZB(b) {
     signal input skip_checks;
     signal output one_hot[b];
 
+    var bit_value;
+
+    component to_bits = Num2Bits(b);
+    to_bits.in <== in;
+    signal in_bits[b] <== to_bits.bits;
+
+    var MSNZB_found = 0;
+    for (var i = b-1; 0 <= i; i--) {
+
+        if (!MSNZB_found &&  in_bits[i] == 1) {
+            MSNZB_found = 1;
+            bit_value = 1;
+        } else {
+            bit_value = 0;
+        }
+
+        one_hot[i] <-- bit_value ? 1 : 0;
+
+        one_hot[i] * (1 - one_hot[i]) === 0;
+        // log(i, one_hot[i], in_bits[i]);
+    }
+
+    // log("MSNZB found: ", MSNZB_found);
+    if (!skip_checks){
+        assert(MSNZB_found);
+    }
+
+
     // TODO
 }
 
