@@ -317,9 +317,6 @@ template MSNZB(b) {
     if (!skip_checks){
         assert(MSNZB_found);
     }
-
-
-    // TODO
 }
 
 /*
