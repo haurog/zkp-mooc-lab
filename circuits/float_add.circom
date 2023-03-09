@@ -313,6 +313,7 @@ template MSNZB(b) {
         // log(i, one_hot[i], in_bits[i]);
     }
 
+    skip_checks*(1-skip_checks) === 0;
     // log("MSNZB found: ", MSNZB_found);
     if (!skip_checks){
         assert(MSNZB_found);
