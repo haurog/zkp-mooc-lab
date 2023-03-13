@@ -273,12 +273,16 @@ template LeftShift(shift_bound) {
     shifted_signal <-- x << shift;
     max_shifted_signal <-- x << shift_bound;
 
+    y <-- shifted_signal;
+
+    component less_than = LessThan(252);
+    less_than.in[0] <== shift;
+    less_than.in[1] <== shift_bound;
+
     if (!skip_checks) {
         assert(0 <= shifted_signal);
-        assert(shifted_signal < max_shifted_signal);
+        assert(less_than.out);
     }
-
-    y <-- shifted_signal;
 }
 
 /*
