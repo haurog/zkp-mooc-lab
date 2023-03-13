@@ -386,12 +386,63 @@ template FloatAdd(k, p) {
     signal output e_out;
     signal output m_out;
 
-    component check_first = CheckWellFormedness(k, p);
-    check_first.e <== e[0];
-    check_first.m <== m[0];
-    component check_second = CheckWellFormedness(k, p);
-    check_second.e <== e[1];
-    check_second.m <== m[1];
+    var skip_checks = 0;
+    var bound = 252;
+
+    component check_1 = CheckWellFormedness(k, p);
+    check_1.e <== e[0];
+    check_1.m <== m[0];
+    component check_2 = CheckWellFormedness(k, p);
+    check_2.e <== e[1];
+    check_2.m <== m[1];
+
+    component left_shift_1 = LeftShift(bound);
+    left_shift_1.x <== e[0];
+    left_shift_1.shift <== p + 1;
+    left_shift_1.skip_checks <== skip_checks;
+    signal mgn_1 <== left_shift_1.y + m[0];
+
+    component left_shift_2 = LeftShift(bound);
+    left_shift_2.x <== e[1];
+    left_shift_2.shift <== p + 1;
+    left_shift_2.skip_checks <== skip_checks;
+    signal mgn_2 <== left_shift_2.y + m[1];
+
+    component less_than = LessThan(bound);
+    less_than.in[0] <== mgn_1;
+    less_than.in[1] <== mgn_2;
+    signal is_less <== less_than.out;
+
+    signal alpha_e;
+    signal alpha_m;
+    signal beta_e;
+    signal beta_m;
+
+    component ift_alpha_e = IfThenElse();
+    ift_alpha_e.cond <== is_less;
+    ift_alpha_e.L <== e[1];
+    ift_alpha_e.R <== e[0];
+    alpha_e <== ift_alpha_e.out;
+
+    component ift_alpha_m = IfThenElse();
+    ift_alpha_m.cond <== is_less;
+    ift_alpha_m.L <== m[1];
+    ift_alpha_m.R <== m[0];
+    alpha_m <== ift_alpha_m.out;
+
+    component ift_beta_e = IfThenElse();
+    ift_beta_e.cond <== is_less;
+    ift_beta_e.L <== e[0];
+    ift_beta_e.R <== e[1];
+    beta_e <== ift_beta_e.out;
+
+    component ift_beta_m = IfThenElse();
+    ift_beta_m.cond <== is_less;
+    ift_beta_m.L <== m[0];
+    ift_beta_m.R <== m[1];
+    beta_m <== ift_beta_m.out;
+
+    signal diff <== alpha_e - beta_e;
 
 
 
