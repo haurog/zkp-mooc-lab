@@ -146,17 +146,11 @@ template CheckBitLength(b) {
     signal input in;
     signal output out;
 
-    signal bits[b];
-    var sum_of_bits = 0;
+    component less_than = LessThan(b+1);
+    less_than.in[0] <== in;
+    less_than.in[1] <== 1 << b;  // larger than the largest number possible with b bits.
 
-    for (var i = 0; i < b; i++) {
-        bits[i] <-- (in >> i) & 1;
-        bits[i] * (1 - bits[i]) === 0;
-        sum_of_bits += (2 ** i) * bits[i];
-    }
-
-    out <-- sum_of_bits < in ? 0 : 1;
-    out*(1-out) === 0;
+    out <== less_than.out;
 }
 
 /*
