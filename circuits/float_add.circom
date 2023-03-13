@@ -317,9 +317,12 @@ template MSNZB(b) {
 
         one_hot[i] * (1 - one_hot[i]) === 0;
         // log(i, one_hot[i], in_bits[i]);
+        // log(one_hot[i]);
     }
 
+    // log(one_hot[b-1]);
     skip_checks*(1-skip_checks) === 0;
+    // MSNZB_found*(1-MSNZB_found) === 0;
     // log("MSNZB found: ", MSNZB_found);
     if (!skip_checks){
         assert(MSNZB_found);
