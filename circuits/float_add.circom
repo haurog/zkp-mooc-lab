@@ -386,6 +386,10 @@ template FloatAdd(k, p) {
     signal output e_out;
     signal output m_out;
 
+
+    assert(m[0]==0 || m[0] >= 2**p);
+    assert(m[1]==0 || m[1] >= 2**p);
+
     var skip_checks = 0;
     var bound = 252;
 
