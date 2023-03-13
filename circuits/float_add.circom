@@ -344,7 +344,36 @@ template Normalize(k, p, P) {
     signal output m_out;
     assert(P > p);
 
-    // TODO
+    component msnzb = MSNZB(P+1);
+    msnzb.in <== m;
+    msnzb.skip_checks <== skip_checks;
+    signal one_hot[P+1] <== msnzb.one_hot;
+
+    // log(msnzb.one_hot[P]);
+
+
+    var MSNZB_position = 0;
+    for (var i = 0; i < P; i++) {
+        // log(one_hot[i]);
+        if (one_hot[i] == 1) {
+            MSNZB_position = i;
+        }
+    }
+
+    log(MSNZB_position);
+
+
+    var shift = P - p;
+
+    component mant_shifted = RightShift(P, shift);
+    mant_shifted.x <== m;
+
+    e_out <== e + shift;
+    m_out <== mant_shifted.y;
+
+    if (!skip_checks){
+        assert(m != 0);
+    }
 }
 
 /*
