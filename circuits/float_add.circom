@@ -354,10 +354,12 @@ template Normalize(k, p, P) {
 
     var MSNZB_position = 0;
     for (var i = 0; i < P; i++) {
+
+        MSNZB_position += i*one_hot[i];
         // log(one_hot[i]);
-        if (one_hot[i] == 1) {
-            MSNZB_position = i;
-        }
+        // if (one_hot[i] == 1) {
+        //     MSNZB_position = i;
+        // }
     }
 
     log(MSNZB_position);
@@ -368,7 +370,7 @@ template Normalize(k, p, P) {
     component mant_shifted = RightShift(P, shift);
     mant_shifted.x <== m;
 
-    e_out <== e + shift;
+    e_out <== e -p + MSNZB_position ;
     m_out <== mant_shifted.y;
 
     if (!skip_checks){
