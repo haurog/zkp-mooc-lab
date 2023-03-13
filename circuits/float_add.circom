@@ -386,5 +386,13 @@ template FloatAdd(k, p) {
     signal output e_out;
     signal output m_out;
 
-    // TODO
+    component check_first = CheckWellFormedness(k, p);
+    check_first.e <== e[0];
+    check_first.m <== m[0];
+    component check_second = CheckWellFormedness(k, p);
+    check_second.e <== e[1];
+    check_second.m <== m[1];
+
+
+
 }
