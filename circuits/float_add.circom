@@ -348,13 +348,10 @@ template Normalize(k, p, P) {
     msnzb.in <== m;
     msnzb.skip_checks <== skip_checks;
     signal one_hot[P+1] <== msnzb.one_hot;
-
     // log(msnzb.one_hot[P]);
 
-
     var MSNZB_position = 0;
-    for (var i = 0; i < P; i++) {
-
+    for (var i = 0; i < P + 1; i++) {
         MSNZB_position += i*one_hot[i];
         // log(one_hot[i]);
     }
@@ -363,15 +360,16 @@ template Normalize(k, p, P) {
 
     var shift = P - MSNZB_position;
 
-    component mant_shifted = LeftShift(P);
+    component mant_shifted = LeftShift(252);
     mant_shifted.x <== m;
     mant_shifted.shift <== shift;
     mant_shifted.skip_checks <== skip_checks;
-    e_out <== e -p + MSNZB_position ;
+    e_out <== e - p + MSNZB_position ;
     m_out <== mant_shifted.y;
 
     if (!skip_checks){
         assert(m != 0);
+
     }
 }
 
